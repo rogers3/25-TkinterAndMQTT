@@ -1,4 +1,4 @@
-# TODO: Copy the code in
+# DONE: Copy the code in
 #     m1e_mqtt_receiver.py
 # as your starting point, pasting its code here.
 
@@ -34,4 +34,4 @@
 #
 # main()
 
-# on partners computer 
+# on partners computer
