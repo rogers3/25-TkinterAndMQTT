@@ -55,7 +55,7 @@ def gui(mqtt_client):
 
     forward_button = ttk.Button(main_frame, text="Forward")
     forward_button.grid(row=2, column = 1)
-    forward_button['command'] = lambda: mqtt_client.send_message("say_it", [make_string('forward', str(left_speed_entry.get()), str(right_speed_entry.get()))])
+    forward_button['command'] = lambda: mqtt_client.send_message("forward", [left_speed_entry.get(), right_speed_entry.get()])
     # forward_button['command'] = lambda: make_string('forward', str(left_speed_entry), str(right_speed_entry))
     root.bind('<Up>', lambda event: print("Forward key"))
 
@@ -100,11 +100,6 @@ def gui(mqtt_client):
 
     root.mainloop()
 
-def make_string(a, b, c):
-    string = a
-    if len(b) >= 0:
-        string = string + ' ' + b + ' ' + c
-    return string
 
 def main():
     name1 = input("Enter one name (subscriber): ")
