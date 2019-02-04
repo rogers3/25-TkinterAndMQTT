@@ -24,9 +24,11 @@ Authors: David Mutchler, Vibha Alangar, Matt Boutell, Dave Fisher,
 
 import tkinter
 from tkinter import ttk
+import mqtt_remote_method_calls as com
+import time
 
 
-def main():
+def gui(mqtt_client):
     """ Constructs a GUI that will be used MUCH later to control EV3. """
     # -------------------------------------------------------------------------
     # DONE: 2. Follow along with the video to make a remote control GUI
@@ -53,7 +55,8 @@ def main():
 
     forward_button = ttk.Button(main_frame, text="Forward")
     forward_button.grid(row=2, column = 1)
-    forward_button['command'] = lambda: print("Forward button")
+    forward_button['command'] = lambda: mqtt_client.send_message("say_it", [make_string('forward', str(left_speed_entry.get()), str(right_speed_entry.get()))])
+    # forward_button['command'] = lambda: make_string('forward', str(left_speed_entry), str(right_speed_entry))
     root.bind('<Up>', lambda event: print("Forward key"))
 
     left_button = ttk.Button(main_frame, text="Left")
@@ -97,8 +100,23 @@ def main():
 
     root.mainloop()
 
+def make_string(a, b, c):
+    string = a
+    if len(b) >= 0:
+        string = string + ' ' + b + ' ' + c
+    return string
 
-# -----------------------------------------------------------------------------
-# Calls  main  to start the ball rolling.
-# -----------------------------------------------------------------------------
+def main():
+    name1 = input("Enter one name (subscriber): ")
+    name2 = input("Enter another name (publisher): ")
+
+    mqtt_client = com.MqttClient()
+    mqtt_client.connect(name1, name2)
+    time.sleep(1)  # Time to allow the MQTT setup.
+    print()
+
+    while True:
+        s = gui(mqtt_client)
+        mqtt_client.send_message("say_it", [s])
+
 main()
